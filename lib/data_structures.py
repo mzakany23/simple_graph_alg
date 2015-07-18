@@ -88,12 +88,12 @@ class Graph:
 		return [x for x in self.grid[0] if x.id == "_"]
 
 
-	def show_grid(self):
-		x,y = 0,0
+	# def show_grid(self):
+	# 	x,y = 0,0
 		
-		for x in range(self.grid_length-1):
-			for y in range(self.__col_length()):
-				print self.grid[x][y].location
+	# 	for x in range(self.grid_length-1):
+	# 		for y in range(self.__col_length()):
+	# 			print self.grid[x][y].location
 
 	def get_node(self,location):
 		if (location['y'] > self.__col_length() 
@@ -138,9 +138,11 @@ class Graph:
 class Traverse:
 	def __init__(self,file):
 		self.graph = Graph(file)
+		self.alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 		self.path = []
 		
 	def bfs(self):
+	
 		if self.graph.theres_an_end_of_maze():
 			start = self.graph.connections[0]
 			queue = [start]
@@ -158,24 +160,111 @@ class Traverse:
 					
 					if (next_node.keys()[0].location    == end 
 						or next_node.keys()[0].location == next_to_last):
+						
 						self.path.append(next_node)
 						if self.path[-1] == next_node:
 							final_node = self.graph.search_connections(self.graph.grid[0][3])
 							self.path.append(final_node)
-						return self
+						return 
 					elif next_node not in self.path:
 						queue.insert(0,next_node)
 						self.path.append(next_node)	
 		else:
 			print 'there is not a way out of the maze'
 
-				
+
+	def show_route(self):
+		self.bfs()
+		connections = self.path
+		g = self.graph
+
+		x,y,i = 0,0,0
+		
+		output = ""
+		x = len(g.grid)-1
+
+		d = {}
 	
+		for found in self.path:
+			loc = str(found.keys()[0].location)
+			d[loc] = found
 
+		location_path = d.keys()
+
+		while x > -1:
+			line = ""
+
+			for y in range(len(g.grid[0])-1):
+
+				# last column
+				if y == 5:
+					if g.grid[x][y].id == '_':
+						if str(g.grid[x][y].location) in location_path:
+							line += self.alphabet[i]
+							i += 1
+						else:
+							line += '_'
+					else:
+						line += '#'
+
+					line += '#'
+					line += '\n'
+					new_output = line + output
+					output = new_output
+
+				elif g.grid[x][y].id == '_':
+					if str(g.grid[x][y].location) in location_path:
+						line += self.alphabet[i]
+						i += 1
+					else:
+						line += '_'
+				else:
+					line += '#'
+
+
+			x -= 1
+
+		return output
+
+
+
+
+
+
+	# def show_route(self):
+	# 	output = ""
+	# 	g = self.graph
+	# 	i = 0
+	# 	if i == 26: i = 0
+
+	# 	for x, node in enumerate(g.grid):
+	# 		line = ""
+	# 		for y in range(len(g.grid[0])-1):	
+	# 			if y == 5:
+	# 				if g.grid[x][y].id == '_':
+	# 					line += self.alphabet[i]
+	# 					i += 1
+	# 				else:
+	# 					line += '#'
+	# 				line += '#'
+	# 				line += '\n'
+	# 				output += line
+	# 			elif g.grid[x][y].id == '_':
+	# 				line += self.alphabet[i]
+	# 				i += 1
+	# 			else:
+	# 				line += g.grid[x][y].id
+
+	# 	return output
+	
+	# def show_route(self):
+	# 	connections = self.graph.connections
+	# 	con_length = len(connections)-1
+
+	# 	for i in range(con_length):
+	# 		print connections[i]
 		
 
-		
-			
 
 
 
@@ -195,11 +284,7 @@ filename = '../test_mazes.txt'
 
 path = Traverse(filename)
 
-for x in path.bfs().path:
-	print x.keys()[0].location
-
-
-
+print path.show_route()
 
 
 
