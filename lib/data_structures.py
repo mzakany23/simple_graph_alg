@@ -1,3 +1,4 @@
+
 # from itertools import cycle
 
 # alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
@@ -10,7 +11,8 @@
 	
 class Vertex:
 	location = {}
-	
+	discovered = False
+
 	open = False
 	
 	def left(self):
@@ -39,7 +41,7 @@ class Graph:
 		self.connections = []
 		self.connection_count = 0
 		self.grid_length = 0
-
+		self.make_grid()
 	
 	def make_grid(self):	
 		line = []
@@ -59,12 +61,14 @@ class Graph:
 					self.grid_length += 1
 				elif c == "#":
 					v = Vertex()
+					v.id = "#"
 					v.location = {'x' : x, 'y' : y}
 					line.append(v)
 					y += 1
 				elif c == "_":
 					self.connection_count += 1
 					v = Vertex()
+					v.id = "_"
 					v.location = {'x' : x, 'y' : y}
 					v.open = True
 					self.edges.insert(0,v)
@@ -77,9 +81,15 @@ class Graph:
 
 		self.__find_connections()
 
-	# private
-	def __get_node(self,location):
-		if (location['y'] > self.__col_length 
+	def show_grid(self):
+		x,y = 0,0
+		
+		for x in range(self.grid_length-1):
+			for y in range(self.__col_length()):
+				print self.grid[x][y].location
+
+	def get_node(self,location):
+		if (location['y'] > self.__col_length() 
 			or location['y'] < 0 
 			or location['x'] > self.grid_length-1 
 			or location['x'] < 0):
@@ -87,8 +97,10 @@ class Graph:
 		else:	
 			return self.grid[location['x']][location['y']]
 
+	# private
+	
 	def __col_length(self):
-		return len(self.grid[0])-self.grid_length-1
+		return len(self.grid[0])-1
 
 	def __find_connections(self):
 		if self.grid:
@@ -99,10 +111,10 @@ class Graph:
 					'connections' : []
 				}
 
-				up    = self.__get_node(path.up())
-				down  = self.__get_node(path.down())
-				left  = self.__get_node(path.left())
-				right = self.__get_node(path.right())
+				up    = self.get_node(path.up())
+				down  = self.get_node(path.down())
+				left  = self.get_node(path.left())
+				right = self.get_node(path.right())
 				
 				if up.open: con['connections'].append(up)
 				if down.open: con['connections'].append(down)
@@ -115,13 +127,48 @@ class Graph:
 			print 'grid hasnt been initialized yet.'
 
 	
- 
+class Traverse:
+	def __init__(self,file):
+		self.graph = Graph(file)
+		
+	def bfs(self):
+		queue = []
+		graph = self.graph
+
+		
+
+
+		        
+
+
+
+
+
+		
+
+		
+			
+
+
+
+		
+
+
+
+
+
+				
+
+
+
+
 
 filename = '../test_mazes.txt'
 
-g = Graph(filename)
+path = Traverse(filename)
 
-g.make_grid()
+path.bfs()
+
 
 
 
