@@ -1,14 +1,3 @@
-
-# from itertools import cycle
-
-# alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-# for p in cycle(alphabet):
-#   if p == 'z':
-#   	break
-#   else:
-#   	print p
-
-	
 class Vertex:
 	location = {}
 	open = False
@@ -77,23 +66,16 @@ class Graph:
 				if not c:
 					break
 
-		self.__find_connections()
+		self.__generate_connections()
 
 	def search_connections(self,node):
 		for key_node in self.connections:
 			if key_node.keys()[0] == node:
 				return key_node
 
-	def theres_an_end_of_maze(self):
+	def maze_end(self):
 		return [x for x in self.grid[0] if x.id == "_"]
 
-
-	# def show_grid(self):
-	# 	x,y = 0,0
-		
-	# 	for x in range(self.grid_length-1):
-	# 		for y in range(self.__col_length()):
-	# 			print self.grid[x][y].location
 
 	def get_node(self,location):
 		if (location['y'] > self.__col_length() 
@@ -109,7 +91,7 @@ class Graph:
 	def __col_length(self):
 		return len(self.grid[0])-1
 
-	def __find_connections(self):
+	def __generate_connections(self):
 		if self.grid:
 
 			for path in self.edges:
@@ -141,9 +123,10 @@ class Traverse:
 		self.alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 		self.path = []
 		
-	def bfs(self):
-	
-		if self.graph.theres_an_end_of_maze():
+	def traverse_file(self):
+		''' sort of like breadth first search'''
+
+		if self.graph.maze_end():
 			start = self.graph.connections[0]
 			queue = [start]
 			self.path.append(start)
@@ -174,22 +157,27 @@ class Traverse:
 
 
 	def show_route(self):
-		self.bfs()
+		''' start from bottom and go up'''
+
+		output = ""
+		self.traverse_file()
 		connections = self.path
 		g = self.graph
 
 		x,y,i = 0,0,0
-		
-		output = ""
 		x = len(g.grid)-1
 
+		# circular array
+		if i == 26: i = 0
+
+		# location dict to check against
 		d = {}
-	
+		
 		for found in self.path:
 			loc = str(found.keys()[0].location)
 			d[loc] = found
 
-		location_path = d.keys()
+		location_dict_keys = d.keys()
 
 		while x > -1:
 			line = ""
@@ -199,7 +187,7 @@ class Traverse:
 				# last column
 				if y == 5:
 					if g.grid[x][y].id == '_':
-						if str(g.grid[x][y].location) in location_path:
+						if str(g.grid[x][y].location) in location_dict_keys:
 							line += self.alphabet[i]
 							i += 1
 						else:
@@ -211,9 +199,9 @@ class Traverse:
 					line += '\n'
 					new_output = line + output
 					output = new_output
-
+					
 				elif g.grid[x][y].id == '_':
-					if str(g.grid[x][y].location) in location_path:
+					if str(g.grid[x][y].location) in location_dict_keys:
 						line += self.alphabet[i]
 						i += 1
 					else:
@@ -221,49 +209,11 @@ class Traverse:
 				else:
 					line += '#'
 
-
 			x -= 1
 
 		return output
 
 
-
-
-
-
-	# def show_route(self):
-	# 	output = ""
-	# 	g = self.graph
-	# 	i = 0
-	# 	if i == 26: i = 0
-
-	# 	for x, node in enumerate(g.grid):
-	# 		line = ""
-	# 		for y in range(len(g.grid[0])-1):	
-	# 			if y == 5:
-	# 				if g.grid[x][y].id == '_':
-	# 					line += self.alphabet[i]
-	# 					i += 1
-	# 				else:
-	# 					line += '#'
-	# 				line += '#'
-	# 				line += '\n'
-	# 				output += line
-	# 			elif g.grid[x][y].id == '_':
-	# 				line += self.alphabet[i]
-	# 				i += 1
-	# 			else:
-	# 				line += g.grid[x][y].id
-
-	# 	return output
-	
-	# def show_route(self):
-	# 	connections = self.graph.connections
-	# 	con_length = len(connections)-1
-
-	# 	for i in range(con_length):
-	# 		print connections[i]
-		
 
 
 
@@ -284,7 +234,7 @@ filename = '../test_mazes.txt'
 
 path = Traverse(filename)
 
-print path.show_route()
+# print path.show_route()
 
 
 
