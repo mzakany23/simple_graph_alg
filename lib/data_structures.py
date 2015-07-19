@@ -125,7 +125,7 @@ class Traverse:
 		self.path = []
 		
 	def traverse_file(self):
-		''' sort of like breadth first search'''
+		''' based on breadth first search'''
 
 		if self.graph.maze_end():
 			start = self.graph.connections[0]
@@ -208,7 +208,8 @@ class Traverse:
 					line += '\n'
 					new_output = line + output
 					output = new_output
-
+					print location_dict_keys
+					break
 				elif g.grid[start_row][y].id == '_':
 					if str(g.grid[start_row][y].location) in location_dict_keys:
 						if i == 25: i = 0
