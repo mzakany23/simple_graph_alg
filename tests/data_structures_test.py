@@ -18,7 +18,7 @@ class TestVertex(unittest.TestCase):
 
 class TestGraph(unittest.TestCase):
 	def setUp(self):
-		file = '../test_maze.txt'
+		file = '../mazes/test_maze_1.txt'
 		self.g = Graph(file)
 
 	def test_make_sure_init_fills_instance_variables(self):
@@ -28,7 +28,7 @@ class TestGraph(unittest.TestCase):
 
 class TestTraverse(unittest.TestCase):
 	def setUp(self):
-		file = '../test_maze.txt'
+		file = '../mazes/test_maze_1.txt'
 		self.t = Traverse(file)
 
 	def test_traverse_file_and_fill_path_instance_variable(self):
