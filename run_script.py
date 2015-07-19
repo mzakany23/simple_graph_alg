@@ -1,7 +1,7 @@
 import sys
 sys.path.append('lib/')
 
-from data_structures import Traverse
+from data_structures import Traverse,Graph
 
 
 maze_1 = 'mazes/test_maze_1.txt'
@@ -19,3 +19,6 @@ def run_mazes(*arg):
 		print Traverse(maze).show_route()
 
 run_mazes(mazes)
+
+
+

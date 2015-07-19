@@ -171,82 +171,50 @@ class Traverse:
 
 		return d.keys()
 
+
 	def show_route(self):
-		''' start from bottom and go up'''
-
-		output = ""
+		g    = self.graph
+		cols = len(g.grid[0])
+		rows = len(g.grid)
+		grid = g.grid
 		self.traverse_file()
+		output = ""
+		end_of_col = cols-1
+		i = 0
+		
+		self.traverse_file()
+		
 		connections = self.path
-		g = self.graph
-
-		y,i = 0,0
-		start_row = len(g.grid)-1
-		col_length = len(g.grid[0])-1
+		connections.pop(-1)
+		grid = g.grid
 
 		
-		# dictionary to check against
-		location_dict_keys = self.get_location_dict()
+		for location in connections:
+			try:
+				node = location.keys()[0]
+				if i == 25: i = 0
+				node.id = self.alphabet[i]
+				loc  = node.location
+				x = loc['x']
+				y = loc['y']
+				grid[x][y] = node				
+				i += 1
+			except:
+				pass
+
 		
-		while start_row > -1:
+		row = len(grid)
+		col = len(grid[0])
+
+		for x in range(row):
 			line = ""
-		
-			for y in range(col_length):
-
-				# last column
-				if y == col_length-1:
-					if g.grid[start_row][y].id == '_':
-						if str(g.grid[start_row][y].location) in location_dict_keys:
-							if i == 25: i = 0
-							line += self.alphabet[i]
-							i += 1
-						else:
-							line += '_'
-					else:
-						line += '#'
-
-					line += '#'
+			for y in range(col):
+				char = grid[x][y].id
+				if y == col-1:
+					line += char
 					line += '\n'
-					new_output = line + output
+					new_output = output + line 
 					output = new_output
-					
-					break
-				elif g.grid[start_row][y].id == '_':
-					if str(g.grid[start_row][y].location) in location_dict_keys:
-						if i == 25: i = 0
-						line += self.alphabet[i]
-						i += 1
-					else:
-						line += '_'
 				else:
-					line += '#'
-
-			start_row -= 1
-
+					line += char
 		return output
-
-
-
-
-
-
-		
-
-
-
-
-
-				
-
-
-
-
-
-
-
-
-
-
-
-
-
-
