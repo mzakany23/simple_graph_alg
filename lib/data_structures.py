@@ -34,7 +34,7 @@ class Graph:
 		line = []
 		x,y = 0,0
 		
-		with open(filename) as f:
+		with open(self.file) as f:
 			
 			while True:
 				
@@ -74,9 +74,10 @@ class Graph:
 				return key_node
 
 	def maze_end(self):
-		return [x for x in self.grid[0] if x.id == "_"]
+		last_row = self.grid[0]
+		return [node for node in last_row if node.id == "_"]
 
-
+	
 	def get_node(self,location):
 		if (location['y'] > self.__col_length() 
 			or location['y'] < 0 
@@ -131,8 +132,9 @@ class Traverse:
 			queue = [start]
 			self.path.append(start)
 			
-			end = self.graph.grid[0][3].location
-			next_to_last = self.graph.grid[1][3].location
+			end = self.graph.maze_end()[0].location
+			
+			next_to_last = self.graph.grid[end['x']+1][end['y']+1].location
 			
 			while queue:
 				current_node = queue.pop(0)
@@ -145,16 +147,29 @@ class Traverse:
 						or next_node.keys()[0].location == next_to_last):
 						
 						self.path.append(next_node)
+						
 						if self.path[-1] == next_node:
 							final_node = self.graph.search_connections(self.graph.grid[0][3])
 							self.path.append(final_node)
-						return 
+						return self
+					
 					elif next_node not in self.path:
 						queue.insert(0,next_node)
 						self.path.append(next_node)	
 		else:
 			print 'there is not a way out of the maze'
 
+	def get_location_dict(self):
+		d = {}
+		
+		for found in self.path:
+			try:
+				loc = str(found.keys()[0].location)
+				d[loc] = found
+			except:
+				pass
+
+		return d.keys()
 
 	def show_route(self):
 		''' start from bottom and go up'''
@@ -164,30 +179,24 @@ class Traverse:
 		connections = self.path
 		g = self.graph
 
-		x,y,i = 0,0,0
-		x = len(g.grid)-1
+		y,i = 0,0
+		start_row = len(g.grid)-1
+		col_length = len(g.grid[0])-1
 
-		# circular array
-		if i == 26: i = 0
-
-		# location dict to check against
-		d = {}
 		
-		for found in self.path:
-			loc = str(found.keys()[0].location)
-			d[loc] = found
-
-		location_dict_keys = d.keys()
-
-		while x > -1:
+		# dictionary to check against
+		location_dict_keys = self.get_location_dict()
+		
+		while start_row > -1:
 			line = ""
-
-			for y in range(len(g.grid[0])-1):
+		
+			for y in range(col_length):
 
 				# last column
-				if y == 5:
-					if g.grid[x][y].id == '_':
-						if str(g.grid[x][y].location) in location_dict_keys:
+				if y == col_length-1:
+					if g.grid[start_row][y].id == '_':
+						if str(g.grid[start_row][y].location) in location_dict_keys:
+							if i == 25: i = 0
 							line += self.alphabet[i]
 							i += 1
 						else:
@@ -199,9 +208,10 @@ class Traverse:
 					line += '\n'
 					new_output = line + output
 					output = new_output
-					
-				elif g.grid[x][y].id == '_':
-					if str(g.grid[x][y].location) in location_dict_keys:
+
+				elif g.grid[start_row][y].id == '_':
+					if str(g.grid[start_row][y].location) in location_dict_keys:
+						if i == 25: i = 0
 						line += self.alphabet[i]
 						i += 1
 					else:
@@ -209,7 +219,7 @@ class Traverse:
 				else:
 					line += '#'
 
-			x -= 1
+			start_row -= 1
 
 		return output
 
@@ -225,18 +235,6 @@ class Traverse:
 
 
 				
-
-
-
-
-
-filename = '../test_mazes.txt'
-
-path = Traverse(filename)
-
-# print path.show_route()
-
-
 
 
 
