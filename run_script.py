@@ -8,8 +8,9 @@ maze_1 = 'mazes/test_maze_1.txt'
 maze_2 = 'mazes/test_maze_2.txt'
 maze_3 = 'mazes/test_maze_3.txt'
 maze_4 = 'mazes/test_maze_4.txt'
+maze_5 = 'mazes/test_maze_5.txt'
 
-mazes = [maze_1,maze_2,maze_3,maze_4]
+mazes = [maze_1,maze_2,maze_3,maze_4,maze_5]
 
 def run_mazes(*arg):
 	for maze in mazes:

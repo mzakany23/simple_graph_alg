@@ -159,18 +159,6 @@ class Traverse:
 		else:
 			print 'there is not a way out of the maze'
 
-	def get_location_dict(self):
-		d = {}
-		
-		for found in self.path:
-			try:
-				loc = str(found.keys()[0].location)
-				d[loc] = found
-			except:
-				pass
-
-		return d.keys()
-
 
 	def show_route(self):
 		g    = self.graph
@@ -188,11 +176,11 @@ class Traverse:
 		connections.pop(-1)
 		grid = g.grid
 
-		
+		# all the visited paths
 		for location in connections:
 			try:
 				node = location.keys()[0]
-				if i == 25: i = 0
+				if i == 26: i = 0
 				node.id = self.alphabet[i]
 				loc  = node.location
 				x = loc['x']
